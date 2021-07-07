@@ -1,0 +1,117 @@
+html, body {
+    height: 100vh;
+    width: 100vw;
+    padding: 0 ;
+    margin: 0;
+    background-color: #FAFAFA;
+}
+
+#content-wrapper {
+    margin: 0 auto;
+    max-width: 600px;
+    /* no top or bottom padding, 1.5em left right padding */
+    padding: 0 1.5em;
+}
+
+#top-text, .name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.4em;
+    font-style: italic;
+    display: inline;
+    padding-bottom: 100px;
+}
+
+#about-me a, #about-me p {
+    display: inline;
+}
+
+#about-me {
+    padding-top: 1.3em;
+}
+
+#seaholm-link {
+    font-size: 1.6em;
+    font-family: 'Germania One', 'Open Sans', sans-serif;
+}
+
+#parkway-link {
+    font-size: 1.5em;
+    font-family: 'Racing Sans One', 'Open Sans'
+}
+
+p {
+    color: #444444;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.unicode {
+    display: inline;
+    font-size: 2em;
+}
+
+.name {
+    display: inline;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.dash {
+    display: inline;
+    color: #444444;
+    font-size: 1.2em;
+}
+
+.link-list-head {
+    font-weight: 700;
+    max-width: 200px;
+}
+
+button {
+    cursor: pointer;
+    position: relative;
+    left: 35px;
+    display: inline-block;
+    border: none;
+    /* padding: 5px; */
+    margin: 0;
+    /* font-family: 'Open Sans', sans-serif; */
+    /* font-family: 'Creepster', 'Open Sans', sans-serif; */
+    font-family: 'Modak', 'Chela One', 'Open Sans', sans-serif;
+    font-size: 2em;
+    text-decoration: none;
+    background: #EB1828;
+    color: #FAFAFA;
+    cursor: pointer;
+    text-align: center;
+    -webkit-text-stroke: 1px;
+    -moz-text-stroke: 1px;
+    -webkit-text-stroke-color: #000000;
+    -moz-text-stroke-color: #000000;
+    letter-spacing: .01em;
+}
+
+button:hover,
+button:focus {
+    background: #DD1320;
+}
+
+button:focus {
+    outline: none;
+}
+
+a {
+    padding-right: 0;
+    text-decoration: none;
+    color: #0063AA;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+}
+
+a:visted {
+   color: #0063AA; 
+}
+
+a:hover {
+    color: #DD1320;
+}
