@@ -3,8 +3,8 @@
 // requires matter.js
 
 function main() {
-    gravitize();
+  spanitize();
 }
 
 // call main function
-// main()
+main()
