@@ -68,6 +68,12 @@ p {
     max-width: 200px;
 }
 
+.divider {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
 button {
     cursor: pointer;
     position: relative;
