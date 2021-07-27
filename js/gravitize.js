@@ -23,7 +23,27 @@ function spanitize() {
           word => {
             // dynamically construct a regex that matches the word with a lookahead
             // for whitespace, periods, or a string or line end.
-            let re = new RegExp(word + "(?=(\\s|\\.|$))");
+            let word_esc = word;
+            if ((word[0] === "(") && (word.slice(-1) !== ")")) {
+              let esc = String.raw`\(`;
+              word_esc = word_esc.replace("(", esc);
+            }
+            else if ((word[0] !== "(") && (word.slice(-1) === ")")) {
+              let esc = String.raw`\)`;
+              word_esc = word_esc.replace(")", esc);
+            }
+            else if ((word[0] === "(") && (word.slice(-1) === ")")) {
+              // TODO: there's definitely a better way to handle this
+              let esc = String.raw`\(`;
+              word_esc = word_esc.replace("(", esc);
+              esc = String.raw`\)`;
+              word_esc = word_esc.replace(")", esc);
+            }
+            let re = new RegExp(word_esc + "(?=(\\s|\\.|$))");
+            // TODO: there has to be a better way 
+            if ("span".includes(word)) {
+              re = new RegExp("\\b" + word_esc + "\\b");
+            }
             elt.innerHTML = elt.innerHTML.replace(re,`<span class="phys-obj phys-id-${id_counter}">${word}</span>`);
             id_counter += 1;
           }
@@ -57,9 +77,9 @@ function build_world() {
   // TODO: add a function that changes height on window resize
   World.ground = World.Bodies.rectangle(
     (ground_width / 2) + 10,
-    ground_height,
+    ground_height + 50,
     ground_width + 20,
-    60,
+    150,
     { isStatic: true, restitution: bounce }
   );
   World.Composite.add(World.engine.world, World.ground);

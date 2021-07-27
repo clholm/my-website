@@ -38,7 +38,7 @@ html, body {
 
 #parkway-link {
     font-size: 1.5em;
-    font-family: 'Racing Sans One', 'Open Sans'
+    font-family: 'Racing Sans One', 'Open Sans';
 }
 
 p {
@@ -82,8 +82,6 @@ button {
     border: none;
     /* padding: 5px; */
     margin: 0;
-    /* font-family: 'Open Sans', sans-serif; */
-    /* font-family: 'Creepster', 'Open Sans', sans-serif; */
     font-family: 'Modak', 'Chela One', 'Open Sans', sans-serif;
     font-size: 2em;
     text-decoration: none;
