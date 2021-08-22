@@ -24,25 +24,21 @@ function spanitize() {
             // dynamically construct a regex that matches the word with a lookahead
             // for whitespace, periods, or a string or line end.
             let word_esc = word;
-            if ((word[0] === "(") && (word.slice(-1) !== ")")) {
+            if (word[0] === "(") {
               let esc = String.raw`\(`;
               word_esc = word_esc.replace("(", esc);
             }
-            else if ((word[0] !== "(") && (word.slice(-1) === ")")) {
+            if (word.slice(-1) === ")") {
               let esc = String.raw`\)`;
               word_esc = word_esc.replace(")", esc);
             }
-            else if ((word[0] === "(") && (word.slice(-1) === ")")) {
-              // TODO: there's definitely a better way to handle this
-              let esc = String.raw`\(`;
-              word_esc = word_esc.replace("(", esc);
-              esc = String.raw`\)`;
-              word_esc = word_esc.replace(")", esc);
-            }
             let re = new RegExp(word_esc + "(?=(\\s|\\.|$))");
-            // TODO: there has to be a better way 
+            // TODO: there has to be a better way
+            // hacky fix for paragaphs with with "span", "an", "pan", etc. in them
             if ("span".includes(word)) {
-              re = new RegExp("\\b" + word_esc + "\\b");
+              // negative lookbehind ensures that we aren't span-wrapping a word
+              // that we've already span-wrapped
+              re = new RegExp("(?<!>)\\b" + word_esc + "\\b");
             }
             elt.innerHTML = elt.innerHTML.replace(re,`<span class="phys-obj phys-id-${id_counter}">${word}</span>`);
             id_counter += 1;
