@@ -27,13 +27,31 @@
     <div id="about-me">
       <p>
         The bit0wulf is a DIY chiptune synth that uses keyboard switches
-        and an Arduino Mega 2560 Rev3 to command two AY-3-8912 chips. Currently in progress.
+        and an Arduino Mega 2560 Rev3 to command two AY-3-8912 chips. It is currently in progress,
+        (I am designing the enclosure and keyboard plate at the moment) but you can view a sneak-peek
+        of some designs below!
       </p>
     </div>
 
     <button id="gravity-button" onclick="gravitize()">GRAVITY</button>
 
+    
   </div>
+
+  <div class="project-div">
+    <img id="bit0wulf-board-0" class="project-img bit0wulf-board" src="./img/bit0wulf-0-brd.svg" >
+    <p class="figure-text">Figure 1</p>
+    <p>bit0wulf board 0 PCB (contains keys, LEDs, potentiometers and LED drivers)</p>
+
+    <img id="bit0wulf-board-1" class="project-img bit0wulf-board" src="./img/bit0wulf-1-brd.svg" >
+    <p class="figure-text">Figure 2</p>
+    <p>bit0wulf board 1 PCB (contains the AY-3-8912 chips, the audio out section, and is also an Arduino Mega 2560 Rev 3 shield)</p>
+
+    <img id="bit0wulf-board-2" class="project-img bit0wulf-board" src="./img/bit0wulf-2-brd.svg" >
+    <p class="figure-text">Figure 3</p>
+    <p>bit0wulf board 2 PCB (the power section)</p>
+  </div>
+
   <script src="../js/gravitize.js"></script>
   <script src="../js/matter.min.js"></script>
   <script src="../js/main.js"></script>

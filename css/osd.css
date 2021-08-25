@@ -1,5 +1,5 @@
-body {
-    background-color: #040720 ;
+body, html {
+    background-color: #040720;
     /* background-color: #001F3F;
     background: rgb(0,31,63);
     background: -moz-linear-gradient(180deg, rgba(0,31,63,1) 69%, rgba(9,56,98,1) 95%, rgba(12,64,108,1) 100%);
@@ -39,6 +39,7 @@ button {
     letter-spacing: .01em;
     float: right;
     left: 0;
+    margin-bottom: 1.5em;
 }
 
 button:hover {
@@ -77,4 +78,53 @@ button:hover {
 
 .dash {
     color: #FFFFFF;
+}
+
+.project-img {
+    max-width: 1200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.no-margin {
+    margin: 0;
+    margin-left: -3px;
+    display: inline;
+    padding: 0;
+}
+
+.project-div {
+    /* margin: 0 auto; */
+    text-align: center;
+}
+
+.project-div p {
+    display: inline-block;
+}
+
+.figure-text {
+    font-size: 1.2em;
+    font-family: 'Germania One', 'Open Sans', sans-serif;
+    display: inline-block;
+}
+
+.bit0wulf-board {
+    max-width: 1400px;
+}
+
+#bit0wulf-board-1 {
+    width: 800px;
+}
+
+#bit0wulf-board-2 {
+    width: 400px;
+}
+
+#fafnir-schem {
+    height: 470px;
+}
+
+#malice-striker {
+    max-width: 1300px;
 }

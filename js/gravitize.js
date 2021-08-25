@@ -58,6 +58,39 @@ function spanitize() {
   id_counter = span_helper(a_arr, id_counter);
 }
 
+// adds static objects to the world
+// requires a World be initialized already
+function staticize() {
+  World.static_arr = []
+  let static_arr = document.querySelectorAll("img");
+  static_arr.forEach(
+    img => {
+      // get bounding rectangle for node
+      let rect = img.getBoundingClientRect();
+      // create js obj
+      let obj = {
+        xₒ:     rect.x,
+        yₒ:     rect.y + window.scrollY,
+        width:  rect.width,
+        height: rect.height,
+        img:    img
+      }
+      World.Composite.add(
+        World.engine.world,
+        World.Bodies.rectangle(
+          rect.x + rect.width / 2,
+          obj.yₒ + obj.height / 2,
+          obj.width,
+          obj.height,
+          { isStatic: true, restitution: bounce }
+        )
+      );
+      // store obj in World's static_arr
+      World.static_arr.push(obj);
+    }
+  )
+}
+
 // build and populate physics world
 function build_world() {
   World.Engine = Matter.Engine;
@@ -69,11 +102,17 @@ function build_world() {
   World.engine.gravity.y = .9;
   // add ground to the world
   let ground_width = document.body.offsetWidth;
-  let ground_height = document.body.offsetHeight;
+  // let ground_height = document.body.offsetHeight;
+  let ground_height = Math.max(
+    document.body.scrollHeight, document.documentElement.scrollHeight,
+    document.body.offsetHeight, document.documentElement.offsetHeight,
+    document.body.clientHeight, document.documentElement.clientHeight
+  );
   // TODO: add a function that changes height on window resize
   World.ground = World.Bodies.rectangle(
     (ground_width / 2) + 10,
-    ground_height + 50,
+    // ground_height + 50,
+    ground_height + 60,
     ground_width + 20,
     150,
     { isStatic: true, restitution: bounce }
@@ -95,6 +134,8 @@ function build_world() {
     { isStatic: true, restitution: bounce }
   );
   World.Composite.add(World.engine.world, [World.left_wall, World.right_wall]);
+  // add other static elements
+  staticize();
   // iterate over <span> wrapped elements, create a physics object for them,
   // and add them
   let nodes = document.querySelectorAll(".phys-obj");
@@ -107,7 +148,7 @@ function build_world() {
       // create js obj
       let obj = {
         xₒ: rect.x + rect.width / 2,
-        yₒ: rect.y,
+        yₒ: rect.y + rect.height / 2 + window.scrollY,
         width: rect.width,
         height: rect.height,
         node: node
@@ -137,7 +178,7 @@ function build_world() {
   let button_rect = button.getBoundingClientRect();
   let button_obj = {
     x: button_rect.x + button_rect.width / 2,
-    y: button_rect.y,
+    y: button_rect.y + button_rect.height / 2 + window.scrollY,
     width: button_rect.width,
     height: button_rect.height
   }
@@ -152,14 +193,14 @@ function build_world() {
   // make button absolute
   button.style.position = "absolute";
   button.style.left = button_obj.x - button_rect.width / 2 + "px";
-  button.style.top = button_obj.y + "px";
+  button.style.top = button_obj.y - button_rect.height / 2 + "px";
   // TODO: fix button position on resize
   // iterate over all span-wrapped elements and make their position absolute
   for (let i = 0; i < id_counter; ++i) {
     obj = World.span_map.get(`${i}`);
     node = obj.node;
     node.style.left = obj.xₒ - obj.width / 2 + "px";
-    node.style.top = obj.yₒ + "px";
+    node.style.top = obj.yₒ - obj.height / 2 + "px";
     node.style.position = "absolute";
   }
 
@@ -200,6 +241,15 @@ function step() {
 // create gravity!
 function gravitize() {
   build_world();
+  // freeze static objects in place with absolute positioning
+  World.static_arr.forEach(
+    obj => {
+      let img = obj.img;
+      img.style.left = obj.xₒ + "px";
+      img.style.top = obj.yₒ + "px";
+      img.style.position = "absolute";
+    }
+  )
   // begin the animation!
   window.requestAnimationFrame(step);
 }
