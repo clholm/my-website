@@ -169,7 +169,6 @@ function build_world() {
       World.Composite.add(World.engine.world, obj.phys_obj);
       World.span_map.set(`${id}`, obj);
       // console.log(phys_obj.id + " and " + `${id}`);
-      // set absolute positioning on the element
       ++id_counter;
     }
   )
@@ -198,7 +197,7 @@ function build_world() {
   // iterate over all span-wrapped elements and make their position absolute
   for (let i = 0; i < id_counter; ++i) {
     obj = World.span_map.get(`${i}`);
-    node = obj.node;
+    let node = obj.node;
     node.style.left = obj.xₒ - obj.width / 2 + "px";
     node.style.top = obj.yₒ - obj.height / 2 + "px";
     node.style.position = "absolute";
