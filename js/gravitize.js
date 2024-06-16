@@ -4,6 +4,8 @@ let World = {};
 let id_counter = 0;
 // restitution value for bodies in matter js
 let bounce = .9;
+// toggle for resetting word positions
+let reset_toggle = true;
 
 // wrap every word of body text (paragraph and anchor) in a span
 // and assign them an incremental id for the physics engine
@@ -96,6 +98,8 @@ function build_world() {
   World.Engine = Matter.Engine;
   World.Bodies = Matter.Bodies;
   World.Composite = Matter.Composite;
+  World.Body = Matter.Body;
+  World.Vector = Matter.Vector;
   // create an engine
   World.engine = World.Engine.create();
   // lower gravity a bit
@@ -168,7 +172,6 @@ function build_world() {
       // add phys_obj to world
       World.Composite.add(World.engine.world, obj.phys_obj);
       World.span_map.set(`${id}`, obj);
-      // console.log(phys_obj.id + " and " + `${id}`);
       ++id_counter;
     }
   )
@@ -205,50 +208,90 @@ function build_world() {
 
   World.Composite.add(World.engine.world,button_obj.phys_obj);
   World.button = button_obj;
+
   return World;
 }
 
 // perform step in physics simulation and apply positioning
 function step() {
-  // update the engine, use default time step for right now
-  World.Engine.update(World.engine);
-  // iterate over all physics objects and update their positions
+  // initialize bodies variable here because it's used by both conditional branches
   let bodies = World.Composite.allBodies(World.engine.world);
-  bodies.forEach(
-    body => {
-      // retrieve corresponding object from the span_map
-      let obj = World.span_map.get(`${body.id}`);
-      if (typeof obj !== "undefined") {
-        let pos = body.position;
-        let x = pos.x;
-        let y = pos.y;
-        let transf_x = x - obj.xₒ;
-        let transf_y = y - obj.yₒ;
-        obj.x = x;
-        obj.y = y;
-        obj.θ = body.angle;
-        // do the CSS 🤠
-        node = obj.node;
-        node.style.transform = `translate(${transf_x}px, ${transf_y}px) rotate(${obj.θ}rad)`;
+  // if the toggle is true, we should reset the world instead of
+  // taking a step
+  if (!reset_toggle) {
+    // update the engine, use default time step for right now
+    World.Engine.update(World.engine);
+    // iterate over all physics objects and update their positions
+    // let bodies = World.Composite.allBodies(World.engine.world);
+    bodies.forEach(
+      body => {
+        // retrieve corresponding object from the span_map
+        let obj = World.span_map.get(`${body.id}`);
+        if (typeof obj !== "undefined") {
+          let pos = body.position;
+          let x = pos.x;
+          let y = pos.y;
+          let transf_x = x - obj.xₒ;
+          let transf_y = y - obj.yₒ;
+          obj.x = x;
+          obj.y = y;
+          obj.θ = body.angle;
+          // do the CSS 🤠
+          node = obj.node;
+          node.style.transform = `translate(${transf_x}px, ${transf_y}px) rotate(${obj.θ}rad)`;
+        }
       }
-    }
-  )
-  // recursively call step
-  window.requestAnimationFrame(step);
+    )
+    // recursively call step
+    window.requestAnimationFrame(step);
+  }
+  // if the reset toggle is true, we should reset objects' positions
+  else {
+    // iterate over all physics objects and reset their positions
+    bodies.forEach(
+      body => {
+        // retrieve corresponding object from the span_map
+        let obj = World.span_map.get(`${body.id}`);
+        if (typeof obj !== "undefined") {
+          // do the CSS 🤠
+          node = obj.node;
+          node.style.left = obj.xₒ - obj.width / 2 + "px";
+          node.style.top = obj.yₒ - obj.height / 2 + "px";
+          node.style.position = "absolute";
+          node.style.transform = `translate(0px, 0px) rotate(0rad)`;
+        }
+      }
+    );
+    // reset entire engine because I can't figure out how to reset the physics objects
+    // without doing this 😩
+    World.Engine.clear(World.engine); // that's a confusing line
+    // hacky query needed to change button text
+    // TODO: add the button to the World object
+    let button = document.getElementById("gravity-button");
+    button.innerText = "gravity";
+  }
 }
 
 // create gravity!
 function gravitize() {
-  build_world();
-  // freeze static objects in place with absolute positioning
-  World.static_arr.forEach(
-    obj => {
-      let img = obj.img;
-      img.style.left = obj.xₒ + "px";
-      img.style.top = obj.yₒ + "px";
-      img.style.position = "absolute";
-    }
-  )
-  // begin the animation!
-  window.requestAnimationFrame(step);
+  // toggle the reset toggle
+  reset_toggle = !reset_toggle;
+  if (!reset_toggle) {
+    build_world();
+    // freeze static objects in place with absolute positioning
+    World.static_arr.forEach(
+      obj => {
+        let img = obj.img;
+        img.style.left = obj.xₒ + "px";
+        img.style.top = obj.yₒ + "px";
+        img.style.position = "absolute";
+      }
+    )
+    // hacky query needed to change button text
+    // TODO: add the button to the World object
+    let button = document.getElementById("gravity-button");
+    button.innerText = " reset ";
+    // begin the animation!
+    window.requestAnimationFrame(step);
+  }
 }
