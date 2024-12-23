@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">	
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <title>Offworld Serpent Devices</title>
+  <meta name="description" content="Offworld Serpent Devices makes musical electronic experiments" />
+  <meta name="keywords" content="Connor, Holm, Offworld, Serpent, Devices, Guitar Pedals, Bass Pedals" />
+  <meta name="author" content="Connor Holm" />
+  <!-- <link rel="shortcut icon" href="../favicon.ico"> -->
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="../css/osd.css">
+  <!-- link to Google fonts used -->
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat|Open+Sans');
+    @import url('https://fonts.googleapis.com/css2?family=Modak&family=Chela+One&family=Racing+Sans+One&family=Germania+One&display=swap')    
+  </style>
+  </style>
+</head>
+<body>
+  &nbsp;
+  <div id="content-wrapper">
+    <a class="top-unicode" href="./index.html">𓆙</a>
+    <p id="top-text">The Hellerune Overdrive</p>
+    <a class="top-unicode" href="./index.html">𓆙</a>
+    <div id="about-me">
+      <p>
+        The Hellerune overdrive is a CD4049UBE overdrive similar to the Greedtone or Red Llama 
+        overdrives. Schematic and PCB files can be found on my
+      </p>
+      <a target="_blank" href="https://github.com/clholm/hellerune">Github</a>
+      <p class="no-margin">.</p>
+      <br>
+      <br>
+      <p>
+        Like the pedals that inspired it, the Hellerune overdrive is an overdrive pedal that
+        (hopefully, I haven't built it yet, lol) works well with bass guitar. 
+        This pedal uses 4 op-amps: a non-inverting input buffer, an inverting op-amp for
+        the Baxandall* tone control, another non-inverting input buffer, and then a final
+        inverting op-amp for volume control and preserving the signal's phase.
+      </p>
+      <br>
+      <br>
+      <p>
+        The Hellerune overdrive has two footswitches - an on/off switch and a "more" switch
+        that reduces the input resistance to the CD4049UBE chip by switching resistors, thereby reducing
+        the voltage drop experienced by the input signal to the CD4049UBE. I think that's how it works at least!
+      </p>
+      <br>
+      <br>
+      <p>
+        Version 1 of the pedal also uses an LT1054 chip to double the supply voltage for the op-amps
+        and inverter. As an extra crazy person precaution, there's a voltage divider before the voltage doubler,
+        just in case I use a "9V" power supply that runs hot. I use Strymon power supplies on my board,
+        but for testing pedals I'll generally use a random power brick that I stole from my dad's electronic
+        junk pile, and several of those output more than the 9V indicated. 
+      </p>
+      <br>
+      <br>
+      <p>
+        I removed the voltage doubler chip in version 2 in case I ever want to sell some pedals to
+        my friends (only for the cost of the parts, this isn't a profit-seeking venture!) and I need to
+        comply with FCC regulations.
+      </p>  
+      <br>
+      <br>  
+      <p>
+        The name "Hellerune" comes from the Old English word for
+      </p>
+      <a target="_blank" href="https://en.wiktionary.org/wiki/hellerune">sorceress or witch</a>
+    </div>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="project-div">
+    <img id="hellerune-schem-1" class="project-img" src="./img/hellerune-schem-v1-1.png" >
+    <p class="figure-text">Figure 1</p>
+    <p>Hellerune Overdrive v1 Schematic</p>
+  </div>
+
+  <div class="project-div">
+    <img id="hellerune-schem-2" class="project-img" src="./img/hellerune-schem-v1-2.png" >
+    <p class="figure-text">Figure 2</p>
+    <p>Hellerune Overdrive v1 "more" switch schematic ("switchy")</p>
+  </div>
+
+  /* disable scripts for now because of bugs  */
+  <script src="../js/gravitize.js"></script>
+  <script src="../js/matter.min.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>
