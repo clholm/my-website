@@ -1,4 +1,4 @@
------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 github     : https://github.com/clholm/my-website/blog/
 title      : clholm's blog 
 subtitle   : 😎
@@ -11,7 +11,7 @@ menu       :
    github     : https://github.com/clholm/my-website/blog/
    dark       : javascript:darkmode()
    about      : ?page=../blog-content/about.md
------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 <style comment="additional style">
 #header { {{css-header}}  }
 #left-panel  { width:{{nav-width}} }

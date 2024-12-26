@@ -2,8 +2,11 @@
 <title>clholm</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="./css/casual-markdown.css">
+<!-- importing markdown-it -->
+<script src="./js/markdown-it.min.js"></script>
 <script src="./js/casual-markdown.js"></script>
-<style>  
+
+<style>
 body { font-family:Verdana,sans-serif; font-size:14px; line-height:1.5; margin:0; }
 a 	 { background:transparent; text-decoration:none; color:grey } a:hover { background:#ffd700 }
 nav p  { border-bottom:1px dotted grey; padding:4px; font-weight:700 }
@@ -215,6 +218,9 @@ md.tags   = {}
 md.months = {}
 md.home = (md.params.home? 'home=' + md.params.home + '&' : '')
 md.home += (md.params.theme? 'theme=' + md.params.theme + '&' : '' )
+
+// add new markdown to html parser, markdown-it
+
 
 //=== init blog page.
 window.onload = function () { 

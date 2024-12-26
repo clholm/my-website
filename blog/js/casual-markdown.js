@@ -6,7 +6,7 @@
  * Copyright (c) 2022-2023, Casualwriter (MIT Licensed)
  * https://github.com/casualwriter/casual-markdown
 *****************************************************************************/
-;(function(){ 
+(function(){ 
 
   // define md object, and extent function (which is a dummy function)
   var md = { yaml:{}, before: function (str) {return str}, after: function (str) {return str} }
