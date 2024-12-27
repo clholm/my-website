@@ -201,10 +201,10 @@ changes made by clholm to support clholm.com
     mdText = mdText.replace(/\r\n/g, '\n')
       .replace(/^---+\s*\n([\s\S]*?)\n---+\s*\n/, md.formatYAML);
     
-    // apply yaml variables
+    // apply yaml variables at the markdown file
     // regex matches strings like {{css-background}}
     for (var name in this.yaml) {
-      mdText = mdText.replace(new RegExp('\{\\s*'+name+'\\s*\}', 'gm'), this.yaml[name]);
+      mdText = mdText.replace(new RegExp('\{\{\\s*'+name+'\\s*\}\}', 'gm'), this.yaml[name]);
     }
     
     // handle code-blocks
