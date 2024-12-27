@@ -8,8 +8,9 @@
 *****************************************************************************/
 
 /*
-update 2024/12/2025:
+update 2024/23:
 changes made by clholm to support clholm.com
+changed markdown parser to the `markdown-it` library instead of custom regexes
 */
 
 (function() { 
