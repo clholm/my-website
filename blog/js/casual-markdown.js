@@ -19,7 +19,7 @@ changed markdown parser to the `markdown-it` library instead of custom regexes
     yaml: {}, 
     before: function (str) { return str }, 
     after: function (str) { return str }
-  }
+  };
 
   // initialize markdown-it with options that match the original `casual-markdown`
   // parsing functionality
@@ -30,7 +30,7 @@ changed markdown parser to the `markdown-it` library instead of custom regexes
     linkify: true,
     typographer: true,
     breaks: true
-  })
+  }).use(window.markdownitFootnote);
 
 
   // adding renderer rules to match the original `casual-markdown`
