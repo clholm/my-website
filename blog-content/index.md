@@ -8,7 +8,7 @@ css-header : background-color:hsla(202, 58%, 56%, 1); color:hsla(69, 45%, 94%, 1
 menu       : 
    site home  : /
    blog home  : ?
-   github     : https://github.com/clholm/my-website/blog/
+   github     : https://github.com/clholm/my-website/tree/main/blog
    about      : ?page=../blog-content/about.md
 -------------------------------------------------------------------------------
 <style comment="additional style">
