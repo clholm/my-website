@@ -14,4 +14,5 @@ i'm interested in:
 ### blog history
                     
 * 2024/12/23, started working on this blog - forked the [casual-markdown-blog](https://github.com/casualwriter/casual-markdown-blog/) repository
+* 2025/01/02, updated blog style (based on [this background art](https://www.artstation.com/artwork/Dv8k3e)) from the excellent show Scavengers Reign
 * 2025/01/?, initial release

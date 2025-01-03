@@ -1,15 +1,14 @@
 -------------------------------------------------------------------------------
 github     : https://github.com/clholm/my-website/blog/
 title      : clholm's blog 
-subtitle   : 😎
+subtitle   : aluminum enthusiast
 nav-group  : featured, new-3, tags, months
 nav-width  : 320px
-css-header : background:linear-gradient(to bottom right, #06c, #fc0); color:white
+css-header : background-color:hsla(202, 58%, 56%, 1); color:hsla(69, 45%, 94%, 1);
 menu       : 
-   site home  : ../
+   site home  : /
    blog home  : ?
    github     : https://github.com/clholm/my-website/blog/
-   dark       : javascript:darkmode()
    about      : ?page=../blog-content/about.md
 -------------------------------------------------------------------------------
 <style comment="additional style">
@@ -17,12 +16,6 @@ menu       :
 #left-panel  { width:{{nav-width}} }
 #right-panel { left: calc({{nav-width}} + 20px) }
 h1 { border-bottom:1px dotted grey }
-.nav-post a  { color: teal }
-.nav-tag  a  { color: #06c }
-.nav-month a { color: grey }
-.post-date   { font-size:12px; font-weight:400; }
-.post-title  { font-size:16px; color:#333 }
-.post-tags   { left-margin:20px; padding:4px; font-size:10px; color:green; font-weight:400 }
 </style>
 
 <div id="md-post">
