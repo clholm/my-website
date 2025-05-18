@@ -15,11 +15,11 @@
     --ivory: hsla(69, 45%, 94%, 1);
     --celestial-blue: hsla(202, 58%, 56%, 1);
     --raisin-black: hsla(288, 6%, 16%, 1);
-    --bittersweet-shimmer: hsla(357, 45%, 54%, 1);
+    --bittersweet-shimmer: rgb(216, 107, 112);
     --outer-space: hsl(191, 8%, 28%);
     --air-force-blueish: rgb(29, 58, 71);
     --blueish: rgb(0, 69, 130);
-    --greenish: rgb(35, 83, 63);
+    --greenish: rgb(21, 73, 51);
 }
 
 body {
@@ -33,7 +33,7 @@ body {
 a {
     background: transparent;
     text-decoration: none;
-    color: var(--air-force-blueish);
+    color: var(--blueish);
 }
 
 a:hover {
@@ -220,4 +220,15 @@ nav li {
     font-size: 12px;
     color: var(--greenish);
     font-weight: 400
+}
+
+/* overriding casual-markdown.css styles below */
+
+.markdown blockquote {
+    background: var(--ivory);
+}
+
+.markdown code {
+    background-color: var(--ivory);
+    color: var(--blueish);
 }
