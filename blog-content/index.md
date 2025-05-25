@@ -26,8 +26,8 @@ h1 { border-bottom:1px dotted grey }
 > build writeup for my new p-bass (in progress)
 
 # Archives
-   
-### Aug 2022
+
+### Dec 2024
                     
 * 2024/12/24: [(one more) p-bass](../blog-content/20241223-p-bass.md) { #bass, #aluminum }
 
