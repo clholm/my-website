@@ -43,16 +43,27 @@ changed markdown parser to the `markdown-it` library instead of custom regexes
     return self.renderToken(tokens, idx, options);
   };
 
+  // markdownIt.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+  //   // add target="_blank" for links with "new" title
+  //   // original `casual-markdown` code added "_new" instead, but apparently that's
+  //   // not in the html spec: https://stackoverflow.com/questions/4964130/target-blank-vs-target-new
+  //   var aIndex = tokens[idx].attrIndex('title');
+  //   if (aIndex >= 0 && tokens[idx].attrs[aIndex][1] === 'new') {
+  //     tokens[idx].attrSet('target', '_blank');
+  //   }
+  //   return defaultRender(tokens, idx, options, env, self);
+  // };
+
+  // add target="_blank" to all links
+  // from https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
   markdownIt.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-    // add target="_blank" for links with "new" title
-    // original `casual-markdown` code added "_new" instead, but apparently that's
-    // not in the html spec: https://stackoverflow.com/questions/4964130/target-blank-vs-target-new
-    var aIndex = tokens[idx].attrIndex('title');
-    if (aIndex >= 0 && tokens[idx].attrs[aIndex][1] === 'new') {
-      tokens[idx].attrSet('target', '_blank');
-    }
+    // add a new `target` attribute, or replace the value of the existing one.
+    tokens[idx].attrSet('target', '_blank');
+  
+    // pass the token to the default renderer.
     return defaultRender(tokens, idx, options, env, self);
   };
+
 
   // function for REGEXP to convert html tag. ie. <TAG> => &lt;TAG&gt;
   // clholm note: no idea if this is sufficient to prevent XSS or not, I suspect
@@ -113,6 +124,24 @@ changed markdown parser to the `markdown-it` library instead of custom regexes
 
     // handles <hX>{YYYY}<hX> for some reason
     html = html.replace(/^<h(\d)\>(.*?)\s*{(.*)}\s*<\/h\d\>/gm, '<h$1 id="$3">$2</h$1>');
+
+
+    // NEW: Handle the specific caption structure
+    // This regex looks for:
+    // 1. A paragraph tag opening (<p>)
+    // 2. Strong tag with content ([<strong>...</strong>]) - this is your caption
+    // 3. A break tag (<br>)
+    // 4. An image tag (<img...>)
+    // 5. A paragraph tag closing (</p>)
+    // It captures the strong content and the image tag.
+    // Then it reconstructs the html, placing the strong content inside a new div.
+    html = html.replace(/<p>(\[<strong>(.*?)<\/strong>\])<br>\s*(<img[^>]+>)<\/p>/g, function(match, fullCaptionTag, captionText, imgTag) {
+        // imgTag is the entire <img> element
+        // captionText is just "picture 1: inspecting..."
+        // fullCaptionTag is "[<strong>...</strong>]"
+        return '<p>' + imgTag + '<div class="image-caption-text">' + captionText + '</div></p>';
+    });
+
 
     return html;
   }

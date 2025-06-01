@@ -95,3 +95,21 @@
 .toc li:hover {
     background: #f0f0f0
 }
+
+/* gemini-generated css below */
+
+/* image centering and sizing when inside a paragraph */
+.markdown p img {
+    display: block; /* makes the image a block-level element */
+    margin: 0 auto; /* centers the image horizontally */
+    max-width: 80%; /* limits the image width to 80% of its container */
+    max-height: auto; /* ensures the image scales proportionally */
+}
+
+/* style for the precisely-targeted image caption text */
+.image-caption-text {
+    text-align: center; /* center-justifies the caption text */
+    font-weight: bold; /* makes the caption text bold */
+    margin-top: 10px; /* adds some space above the caption */
+    /* you can add other structural styles here */
+}
