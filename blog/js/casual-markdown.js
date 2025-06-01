@@ -25,6 +25,7 @@ changed markdown parser to the `markdown-it` library instead of custom regexes
   // parsing functionality
   // clholm note: enabling HTML here could make the application susceptible to
   // XSS. may need to change this in the future.
+  // right now I control all the content on the page, so it shouldn't be an issues.
   var markdownIt = window.markdownit({
     html: true,
     linkify: true,
