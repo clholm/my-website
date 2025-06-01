@@ -43,16 +43,27 @@ changed markdown parser to the `markdown-it` library instead of custom regexes
     return self.renderToken(tokens, idx, options);
   };
 
+  // markdownIt.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+  //   // add target="_blank" for links with "new" title
+  //   // original `casual-markdown` code added "_new" instead, but apparently that's
+  //   // not in the html spec: https://stackoverflow.com/questions/4964130/target-blank-vs-target-new
+  //   var aIndex = tokens[idx].attrIndex('title');
+  //   if (aIndex >= 0 && tokens[idx].attrs[aIndex][1] === 'new') {
+  //     tokens[idx].attrSet('target', '_blank');
+  //   }
+  //   return defaultRender(tokens, idx, options, env, self);
+  // };
+
+  // add target="_blank" to all links
+  // from https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
   markdownIt.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-    // add target="_blank" for links with "new" title
-    // original `casual-markdown` code added "_new" instead, but apparently that's
-    // not in the html spec: https://stackoverflow.com/questions/4964130/target-blank-vs-target-new
-    var aIndex = tokens[idx].attrIndex('title');
-    if (aIndex >= 0 && tokens[idx].attrs[aIndex][1] === 'new') {
-      tokens[idx].attrSet('target', '_blank');
-    }
+    // add a new `target` attribute, or replace the value of the existing one.
+    tokens[idx].attrSet('target', '_blank');
+  
+    // pass the token to the default renderer.
     return defaultRender(tokens, idx, options, env, self);
   };
+
 
   // function for REGEXP to convert html tag. ie. <TAG> => &lt;TAG&gt;
   // clholm note: no idea if this is sufficient to prevent XSS or not, I suspect

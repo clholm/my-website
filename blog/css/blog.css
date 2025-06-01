@@ -320,12 +320,12 @@ nav li {
 }
 
 /* blog-specific image and caption styling */
-.markdown img {
-    border-radius: 8px; /* optional: adds slightly rounded corners to images */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* optional: adds a subtle shadow */
-}
+/* .markdown img {
+    border-radius: 8px; /* optional: adds slightly rounded corners to images
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* optional: adds a subtle shadow
+} */
 
 .image-caption {
-    font-size: 0.9em; /* slightly smaller font size for captions */
+    font-size: 0.8em; /* slightly smaller font size for captions */
     color: var(--raisin-black); /* sets a color for the caption */
 }
