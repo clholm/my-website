@@ -114,6 +114,24 @@ changed markdown parser to the `markdown-it` library instead of custom regexes
     // handles <hX>{YYYY}<hX> for some reason
     html = html.replace(/^<h(\d)\>(.*?)\s*{(.*)}\s*<\/h\d\>/gm, '<h$1 id="$3">$2</h$1>');
 
+
+    // NEW: Handle the specific caption structure
+    // This regex looks for:
+    // 1. A paragraph tag opening (<p>)
+    // 2. Strong tag with content ([<strong>...</strong>]) - this is your caption
+    // 3. A break tag (<br>)
+    // 4. An image tag (<img...>)
+    // 5. A paragraph tag closing (</p>)
+    // It captures the strong content and the image tag.
+    // Then it reconstructs the html, placing the strong content inside a new div.
+    html = html.replace(/<p>(\[<strong>(.*?)<\/strong>\])<br>\s*(<img[^>]+>)<\/p>/g, function(match, fullCaptionTag, captionText, imgTag) {
+        // imgTag is the entire <img> element
+        // captionText is just "picture 1: inspecting..."
+        // fullCaptionTag is "[<strong>...</strong>]"
+        return '<p>' + imgTag + '<div class="image-caption-text">' + captionText + '</div></p>';
+    });
+
+
     return html;
   }
 
