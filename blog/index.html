@@ -57,9 +57,24 @@ function darkmode() {
   document.body.className = (document.body.className==='dark'? md.yaml.theme || '' : 'dark' )
 }
 
-//=== load post from markdown file. 
-md.load = function (mdfile) { 
+//=== clean file path for URL (remove ../ prefix)
+md.cleanPath = function(filePath) {
+  return filePath.replace(/^\.\.\//, '');
+}
+
+//=== normalize file path for loading (add ../ if needed)
+md.normalizePath = function(filePath) {
+  if (!filePath.startsWith('../') && !filePath.startsWith('http')) {
+    return '../' + filePath;
+  }
+  return filePath;
+}
+
+//=== load post from markdown file.
+md.load = function (mdfile) {
   var txt, xmlhttp = new XMLHttpRequest();
+  // Normalize the path to ensure it has ../ prefix for loading
+  var normalizedPath = md.normalizePath(mdfile);
   xmlhttp.onload = function (e) {
     if (this.status == '404' ) {
       alert('Oops..., Page not found!' )
@@ -67,10 +82,10 @@ md.load = function (mdfile) {
       txt =  this.responseText.replace(/\[(.*?)\]\((.*?\.md)\)/gm, '<a href=# onclick="md.load(this.title)" title="$2">$1</a>')
       document.getElementById('md-post').innerHTML = md.html(txt) + '<br>'
       document.getElementById('right-panel').scrollTop = 0
-      md.showTags(mdfile)
+      md.showTags(normalizedPath)
     }
   }
-  xmlhttp.open("GET", mdfile, true)
+  xmlhttp.open("GET", normalizedPath, true)
   xmlhttp.send();
 }
 
@@ -111,7 +126,7 @@ md.getPosts = function (match,date,title,file,tags) {
   
   // return html
   return '* <span class="post-date">' + date + '</span>: <a class="post-title" href="?' + md.home
-        + 'post=' + file + '">' + title + '</a><span class="post-tags">' + tags + '</span>' 
+        + 'post=' + md.cleanPath(file) + '">' + title + '</a><span class="post-tags">' + tags + '</span>' 
 }
 
 //=== generate nav content by options := featured | new-? | tags | month
@@ -123,10 +138,10 @@ md.nav = function (options) {
   
     // generate featured posts list
     if (navOpt[i].trim() === 'featured') {
-      navDiv += '<p class="nav-title">Featured</p>'  
+      navDiv += '<p class="nav-title">Featured</p>'
       for (var x=0; md.tags.featured&&x<md.tags.featured.length; x++) {
-        navDiv += '<li class="nav-post"><a href="?' + md.home + 'post=' 
-        navDiv += md.tags.featured[x].file + '">' + md.tags.featured[x].title + '</a></li>'
+        navDiv += '<li class="nav-post"><a href="?' + md.home + 'post='
+        navDiv += md.cleanPath(md.tags.featured[x].file) + '">' + md.tags.featured[x].title + '</a></li>'
       }
       
     // generate new posts list
@@ -134,8 +149,8 @@ md.nav = function (options) {
       var max = 0 + navOpt[i].trim().substr(4)
       navDiv += '<p class="nav-title">New posts</p>'
       for (var x=0; x<max && x<md.posts.length; x++) {
-        navDiv += '<li class="nav-post"><a href="?' + md.home + 'post=' 
-        navDiv += md.posts[x].file + '">' + md.posts[x].title + '</a></li>'
+        navDiv += '<li class="nav-post"><a href="?' + md.home + 'post='
+        navDiv += md.cleanPath(md.posts[x].file) + '">' + md.posts[x].title + '</a></li>'
       }
       
     // generate tag list
@@ -160,10 +175,10 @@ md.nav = function (options) {
 }
 
 //=== create html for a post (in post list)
-md.listPost = function (post) { 
+md.listPost = function (post) {
   var html = '\n<li><span class="post-date">' + post.date.toISOString().substr(0,10) + '</span>: '
-  html += '<a class="post-title" href="?post=' + post.file + '">' + post.title + '</a>'
-  return html + '<span class="post-tags">' + post.tags.join(',') + '</span>' 
+  html += '<a class="post-title" href="?post=' + md.cleanPath(post.file) + '">' + post.title + '</a>'
+  return html + '<span class="post-tags">' + post.tags.join(',') + '</span>'
 }
 
 //=== show post list for tag
@@ -173,9 +188,11 @@ md.showTag = function (tag) {
   document.getElementById('md-post').innerHTML = html + '\n</ul><br>'
 }
 
-//=== massage md link before parse markdown        
+//=== massage md link before parse markdown
 md.before = function (text) {
- return text.replace(/\[(.*?)\]\((.*?\.md)\)/gm, '<a href="?' + md.home + 'post=$2">$1</a>')
+ return text.replace(/\[(.*?)\]\((.*?\.md)\)/gm, function(match, title, file) {
+   return '<a href="?' + md.home + 'post=' + md.cleanPath(file) + '">' + title + '</a>';
+ });
 } 
 
 //=== parse url parameters, init blog objects
