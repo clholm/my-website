@@ -5,7 +5,12 @@
 <!-- importing markdown-it -->
 <script src="./js/markdown-it.min.js"></script>
 <script src="./js/markdown-it-footnote.min.js"></script>
-<script src="./js/casual-markdown.js"></script>
+<!-- importing Highlight.js for syntax highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<!-- importing js-yaml for yaml frontmatter parsing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script src="./js/markdown-blog.js"></script>
 
 <link rel="stylesheet" href="./css/blog.css">
 
@@ -14,8 +19,8 @@
 <div id=header>
   <span id=menu style="float:right; padding:12px"></span>
   <span id=heading style="float:left">
-   <span id=title>casual-markdown</span> 
-   <p id=subtitle>simple is the best</p>
+   <span id=title>clholm's blog</span> 
+   <p id=subtitle>thanks for reading!</p>
   </span>
 </div>
 
@@ -28,21 +33,8 @@
 <button style="display:none" onclick="darkmode()" accesskey=k>Dark</button> 
 
 <script>
-/*****************************************************************************
- * casual-markdown-page - markdown as blog
- * last updated on 2022/08/24, v0.60, supprot nav, home, theme and customized style 
- *
- * Copyright (c) 2022, Casualwriter (MIT Licensed)
- * https://github.com/casualwriter/casual-markdown-blog
-*****************************************************************************/
 
-
-/*
-update 2024/12/2024:
-changes made by clholm to support clholm.com
-*/
-
-//=== toggle HTML in right-panel. (this is a hidden function for developer)
+// toggle HTML in right-panel. (this is a hidden function for developer)
 function toggleHTML() {
   var html = document.getElementById('right-panel').innerHTML
   if (html.substr(0,5)==='<xmp>') {
@@ -52,17 +44,17 @@ function toggleHTML() {
   }
 }
 
-//=== apply dark mode style
+// apply dark mode style
 function darkmode() {
   document.body.className = (document.body.className==='dark'? md.yaml.theme || '' : 'dark' )
 }
 
-//=== clean file path for URL (remove ../ prefix)
+// clean file path for URL (remove ../ prefix)
 md.cleanPath = function(filePath) {
   return filePath.replace(/^\.\.\//, '');
 }
 
-//=== normalize file path for loading (add ../ if needed)
+// normalize file path for loading (add ../ if needed)
 md.normalizePath = function(filePath) {
   if (!filePath.startsWith('../') && !filePath.startsWith('http')) {
     return '../' + filePath;
@@ -70,7 +62,7 @@ md.normalizePath = function(filePath) {
   return filePath;
 }
 
-//=== load post from markdown file.
+// load post from markdown file.
 md.load = function (mdfile) {
   var txt, xmlhttp = new XMLHttpRequest();
   // Normalize the path to ensure it has ../ prefix for loading
@@ -89,7 +81,7 @@ md.load = function (mdfile) {
   xmlhttp.send();
 }
 
-//=== show tags for md post
+// show tags for md post
 md.showTags = function (file) {
   var post = md.posts.find( function(p){return p.file===file} )
   var title = document.getElementById('md-post').querySelector('h1,h2,h3,h4')
@@ -106,7 +98,7 @@ md.showTags = function (file) {
   }
 }
 
-//=== get blog list from "* yyyy/mm/dd: [post-title](md-file) { #tags }"
+// get blog list from "* yyyy/mm/dd: [post-title](md-file) { #tags }"
 md.getPosts = function (match,date,title,file,tags) {
   // compose post list, list by tags, and list by month
   var post = { date:new Date(date), title:title, file:file, tags:tags.trim().split(/\s*,\s*/) }
@@ -129,7 +121,7 @@ md.getPosts = function (match,date,title,file,tags) {
         + 'post=' + md.cleanPath(file) + '">' + title + '</a><span class="post-tags">' + tags + '</span>' 
 }
 
-//=== generate nav content by options := featured | new-? | tags | month
+// generate nav content by options := featured | new-? | tags | month
 md.nav = function (options) {
   var navOpt = (options||'featured, latest, tags, months').split(',')
   var navDiv = '<nav>'
@@ -174,28 +166,28 @@ md.nav = function (options) {
   document.getElementById('left-panel').innerHTML = navDiv + '</nav>'
 }
 
-//=== create html for a post (in post list)
+// create html for a post (in post list)
 md.listPost = function (post) {
   var html = '\n<li><span class="post-date">' + post.date.toISOString().substr(0,10) + '</span>: '
   html += '<a class="post-title" href="?post=' + md.cleanPath(post.file) + '">' + post.title + '</a>'
   return html + '<span class="post-tags">' + post.tags.join(',') + '</span>'
 }
 
-//=== show post list for tag
+// show post list for tag
 md.showTag = function (tag) {
   var html = '\n<h2>Tagged by <code>#' + tag + '</code></h2>\n<ul>\n'
   for (var i=0; md.tags[tag]&&i<md.tags[tag].length; i++) html += md.listPost(md.tags[tag][i])
   document.getElementById('md-post').innerHTML = html + '\n</ul><br>'
 }
 
-//=== massage md link before parse markdown
+// massage md link before parse markdown
 md.before = function (text) {
  return text.replace(/\[(.*?)\]\((.*?\.md)\)/gm, function(match, title, file) {
    return '<a href="?' + md.home + 'post=' + md.cleanPath(file) + '">' + title + '</a>';
  });
 } 
 
-//=== parse url parameters, init blog objects
+// parse url parameters, init blog objects
 md.params = {} 
 window.location.href.replace( /[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) { md.params[key] = value; } );
 md.posts  = []
@@ -204,7 +196,7 @@ md.months = {}
 md.home = (md.params.home? 'home=' + md.params.home + '&' : '')
 md.home += (md.params.theme? 'theme=' + md.params.theme + '&' : '' )
 
-//=== init blog page.
+// init blog page.
 window.onload = function () { 
   var xmlhttp = new XMLHttpRequest();
   
@@ -217,7 +209,7 @@ window.onload = function () {
     
     // apply style/title/subtitle
     document.body.className = md.params.theme || md.yaml.theme || ''
-    document.title = document.getElementById('title').innerText = md.yaml.title || 'Casual-Markdown'
+    document.title = document.getElementById('title').innerText = md.yaml.title || 'cholm-Markdown-Blog'
     document.getElementById('subtitle').innerText = md.yaml.subtitle || '' 
     
     // top menu
@@ -247,7 +239,7 @@ window.onload = function () {
   xmlhttp.send();
 }
 
-//=== for mobile (touch title to show/hide left-panel)
+// for mobile (touch title to show/hide left-panel)
 if (window.innerWidth<900) {
   function toggleTOC(show) {
     var disp = document.getElementById('left-panel').style.display

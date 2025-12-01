@@ -1,7 +1,7 @@
 .markdown code {
     background: #f0f0f0;
     color: navy;
-    border-radius: 6px;
+    border-radius: 2px;
     padding: 2px;
 }
 
@@ -11,6 +11,7 @@
     border: 1px solid #ddd;
     padding: 20px 12px;
     border-radius: 6px;
+    overflow-x: auto;
 }
 
 .markdown pre:hover button {
