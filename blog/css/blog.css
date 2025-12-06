@@ -15,7 +15,7 @@
     --ivory: hsla(69, 45%, 94%, 1);
     --celestial-blue: hsla(202, 58%, 56%, 1);
     --raisin-black: hsla(288, 6%, 16%, 1);
-    --bittersweet-shimmer: rgb(216, 107, 112);
+    --bittersweet-shimmer: rgba(216, 107, 112);
     --outer-space: hsl(191, 8%, 28%);
     --air-force-blueish: rgb(29, 58, 71);
     --blueish: rgb(0, 69, 130);
@@ -94,14 +94,14 @@ nav li {
     padding: 8px
 }
 
-#right-panel {
+/* #right-panel {
     position: absolute;
     right: 0;
     left: 360px;
     top: 60px;
     border-left: 1px solid grey;
     padding: 8px 16px
-}
+} */
 
 .dark,
 .dark pre,
@@ -229,21 +229,44 @@ nav li {
 }
 
 .markdown code {
-    background-color: var(--ivory);
+    /* background-color: var(--ivory); */
     color: var(--blueish);
 }
 
+.markdown pre {
+    background-color: var(--ivory) !important;
+}
 
-/* gemini-generated css below */
+/* some gemini-generated css below */
 
 #right-panel {
     position: absolute;
-    left: 360px; /* stays fixed for wider screens, as per your current layout */
+    left: 360px;
     top: 60px;
-    border-left: 1px solid grey;
     padding: 8px 16px;
     right: 8px; /* default small right margin for most screens */
 }
+
+
+#right-panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;  /* start 1px below the top edge to avoid jutting into header */
+    bottom: 0;
+    width: 1px;
+    background-color: grey;
+}
+
+/* old styles */
+/* #right-panel {
+    position: absolute;
+    right: 0;
+    left: 360px;
+    top: 60px;
+    border-left: 1px solid grey;
+    padding: 8px 16px
+} */
 
 @media print {
     #header,

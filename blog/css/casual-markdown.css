@@ -1,28 +1,40 @@
 .markdown code {
-    background: #f0f0f0;
+    /* background: #f0f0f0; */
     color: navy;
     border-radius: 2px;
-    padding: 2px;
+    padding: 4px 2px;
 }
 
-.markdown pre {
-    background: #f0f0f0;
-    margin: 12px;
-    border: 1px solid #ddd;
-    padding: 20px 12px;
-    border-radius: 6px;
-    overflow-x: auto;
+.markdown .code-block {
+    position: relative;
 }
 
-.markdown pre:hover button {
+/* reset inline code styles for block code */
+.markdown pre code {
+    /* padding: 0; */
+    border-radius: 0;
     display: block;
 }
 
-.markdown pre button {
+.markdown .code-block pre {
+    /* background: #dcdcdc; */
+    margin: 8px;
+    border: 1px solid #ddd;
+    padding: 20px 12px;
+    border-radius: 2px;
+    overflow-x: auto;
+}
+
+.markdown .code-block:hover button {
+    display: block;
+}
+
+.markdown .code-block button {
     display: none;
-    position: relative;
-    float: right;
-    top: -16px
+    position: absolute;
+    right: 8px;
+    top: -8px;
+    z-index: 1;
 }
 
 .markdown blockquote {

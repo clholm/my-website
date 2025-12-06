@@ -20,17 +20,17 @@
       // use Highlight.js for syntax highlighting if available and language is specified
       if (lang && typeof hljs !== 'undefined' && hljs.getLanguage(lang)) {
         try {
-          return '<pre class="hljs"><button onclick="md.clipboard(this)">copy</button><code>' +
+          return '<div class="code-block"><button onclick="md.clipboard(this)">copy</button><pre class="hljs"><code>' +
                  hljs.highlight(str, { language: lang }).value +
-                 '</code></pre>';
-        } 
+                 '</code></pre></div>';
+        }
         catch (__) {}
       }
       // fallback to plain code block with copy button
       // this shouldn't happen
-      return '<pre class="hljs"><button onclick="md.clipboard(this)">copy</button><code>' +
+      return '<div class="code-block"><button onclick="md.clipboard(this)">copy</button><pre class="hljs"><code>' +
              hljs.highlight(str, { language: "text" }).value +
-             '</code></pre>';
+             '</code></pre></div>';
     }
   }).use(window.markdownitFootnote);
 
@@ -75,8 +75,62 @@
 
   // copy to clipboard for code-block
   md.clipboard = function (e) {
-    navigator.clipboard.writeText( e.parentNode.innerText.replace('copy\n','') )
-    e.innerText = 'copied'
+    // clear any existing timeout to prevent race conditions
+    if (e.resetTimeout) {
+      clearTimeout(e.resetTimeout);
+    }
+
+    // get code content directly from <code> element
+    let codeElement = e.parentNode.querySelector('code');
+    let textToCopy = codeElement ? codeElement.innerText : e.parentNode.innerText.replace('copy\n','');
+
+    // copy to clipboard with error handling
+    navigator.clipboard.writeText(textToCopy).then(function() {
+      // visual feedback
+      e.innerText = 'copied';
+      e.classList.add('copied');
+
+      // auto-reset after 2 seconds
+      e.resetTimeout = setTimeout(function() {
+        e.innerText = 'copy';
+        e.classList.remove('copied');
+      }, 2000);
+    }).catch(function(err) {
+      // error handling
+      console.error('Failed to copy:', err);
+      e.innerText = 'error';
+      e.resetTimeout = setTimeout(function() {
+        e.innerText = 'copy';
+      }, 2000);
+    });
+  }
+
+  // show copy button on mobile when code block is tapped
+  if ('ontouchstart' in window) {
+    document.addEventListener('DOMContentLoaded', function() {
+      var hideTimers = {};
+
+      document.addEventListener('touchstart', function(e) {
+        var codeBlock = e.target.closest('.markdown .code-block');
+        if (codeBlock) {
+          var button = codeBlock.querySelector('button');
+          if (button) {
+            // clear any existing timer
+            if (hideTimers[codeBlock]) {
+              clearTimeout(hideTimers[codeBlock]);
+            }
+
+            // show button
+            button.style.display = 'block';
+
+            // hide after 3 seconds
+            hideTimers[codeBlock] = setTimeout(function() {
+              button.style.display = '';
+            }, 3000);
+          }
+        }
+      });
+    });
   }
 
   // custom processor for features not supported by markdown-it
