@@ -7,9 +7,9 @@ nav-width: 320px
 css-header: background-color:hsla(202, 58%, 56%, 1); color:hsla(69, 45%, 94%, 1);
 menu:
   "site home": "/"
-  "blog home": "?"
+  "blog home": "./"
   github: "https://github.com/clholm/my-website/tree/main/blog"
-  about: "?page=../blog-content/about.md"
+  about: "#/page/about"
 ---
 <style comment="additional style">
 #header { {{css-header}}  }

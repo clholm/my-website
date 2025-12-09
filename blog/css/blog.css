@@ -222,7 +222,7 @@ nav li {
     font-weight: 400
 }
 
-/* overriding casual-markdown.css styles below */
+/* overriding casual-markdown.css and highlightjs styles below */
 
 .markdown blockquote {
     background: var(--ivory);
@@ -235,6 +235,10 @@ nav li {
 
 .markdown pre {
     background-color: var(--ivory) !important;
+}
+
+.markdown blockquote {
+    border-left: 6px solid var(--celestial-blue);
 }
 
 /* some gemini-generated css below */
