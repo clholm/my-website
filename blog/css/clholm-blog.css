@@ -15,7 +15,7 @@
     --ivory: hsla(69, 45%, 94%, 1);
     --celestial-blue: hsla(202, 58%, 56%, 1);
     --raisin-black: hsla(288, 6%, 16%, 1);
-    --bittersweet-shimmer: rgb(216, 107, 112);
+    --bittersweet-shimmer: rgba(216, 107, 112);
     --outer-space: hsl(191, 8%, 28%);
     --air-force-blueish: rgb(29, 58, 71);
     --blueish: rgb(0, 69, 130);
@@ -90,18 +90,20 @@ nav li {
     position: absolute;
     left: 0;
     width: 340px;
-    top: 60px;
-    padding: 8px
+    top: 67px;
+    padding: 8px;
+    max-height: calc(100vh - 67px);
+    overflow-y: auto;
 }
 
-#right-panel {
+/* #right-panel {
     position: absolute;
     right: 0;
     left: 360px;
     top: 60px;
     border-left: 1px solid grey;
     padding: 8px 16px
-}
+} */
 
 .dark,
 .dark pre,
@@ -222,7 +224,7 @@ nav li {
     font-weight: 400
 }
 
-/* overriding casual-markdown.css styles below */
+/* overriding markdown-blog.css and highlightjs styles below */
 
 .markdown blockquote {
     background: var(--ivory);
@@ -233,17 +235,58 @@ nav li {
     color: var(--blueish);
 }
 
+.markdown pre {
+    background-color: var(--ivory) !important;
+}
 
-/* gemini-generated css below */
+.markdown blockquote {
+    border-left: 6px solid var(--celestial-blue);
+}
+
+.toc h3 {
+    color: var(--blueish);
+}
+
+.toc li:hover {
+    background: var(--celadon);
+}
+
+.toc .active {
+    color: var(--blueish);
+    font-weight: bold;
+    background: var(--ivory);
+}
+
+/* some gemini-generated css below */
 
 #right-panel {
     position: absolute;
-    left: 360px; /* stays fixed for wider screens, as per your current layout */
-    top: 60px;
-    border-left: 1px solid grey;
+    left: 360px;
+    top: 67px;
     padding: 8px 16px;
     right: 8px; /* default small right margin for most screens */
 }
+
+
+#right-panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;  /* start 1px below the top edge to avoid jutting into header */
+    bottom: 0;
+    width: 1px;
+    background-color: grey;
+}
+
+/* old styles */
+/* #right-panel {
+    position: absolute;
+    right: 0;
+    left: 360px;
+    top: 60px;
+    border-left: 1px solid grey;
+    padding: 8px 16px
+} */
 
 @media print {
     #header,
@@ -280,14 +323,14 @@ nav li {
         position: absolute;
         left: 0px !important;
         width: 100% !important;
-        top: 80px;
+        top: 87px;
         padding: 4px 8px
     }
 
     #right-panel {
         position: absolute;
         left: 0px !important;
-        top: 80px;
+        top: 87px;
         overflow: auto;
         padding: 4px 8px;
         right: 0px; /* Full width for these smaller screens */
@@ -305,14 +348,14 @@ nav li {
         position: absolute;
         left: 0px !important;
         width: 100% !important;
-        top: 100px;
+        top: 107px;
         padding: 4px 8px
     }
 
     #right-panel {
         position: absolute;
         left: 0px !important;
-        top: 100px;
+        top: 107px;
         overflow: auto;
         padding: 4px 8px;
         right: 0px; /* full width for very small screens */
