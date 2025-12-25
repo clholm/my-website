@@ -224,7 +224,7 @@ nav li {
     font-weight: 400
 }
 
-/* overriding casual-markdown.css and highlightjs styles below */
+/* overriding markdown-blog.css and highlightjs styles below */
 
 .markdown blockquote {
     background: var(--ivory);
