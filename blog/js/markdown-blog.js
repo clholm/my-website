@@ -184,9 +184,113 @@
     return '<div class="markdown">' + mdHTML + '</div>';
   }
 
-  if (typeof exports==='object') { 
+  // generate table of contents from rendered HTML headers
+  // srcDiv: ID of div containing rendered content (e.g., 'md-post')
+  // tocDiv: ID of div where TOC will be inserted (e.g., 'left-panel')
+  // options: { css: 'h2,h3,h4', title: 'Contents', scrollspy: true }
+  md.toc = function(srcDiv, tocDiv, options) {
+    var tocSelector = (options && options.css) || 'h2,h3,h4';
+    var tocTitle = (options && options.title) || 'Contents';
+    var enableScrollspy = options && options.scrollspy;
+
+    var srcElement = document.getElementById(srcDiv);
+    if (!srcElement) return;
+
+    var headers = srcElement.querySelectorAll(tocSelector);
+    if (headers.length === 0) return;
+
+    var html = '<div class="toc"><ul>';
+    if (tocTitle !== 'none') {
+      html += '<h3>' + tocTitle + '</h3>';
+    }
+
+    for (var i = 0; i < headers.length; i++) {
+      var header = headers[i];
+
+      // skip headers with id starting with 'no-toc'
+      if (header.id && header.id.substr(0, 6) === 'no-toc') continue;
+
+      // auto-generate ID if missing
+      if (!header.id) {
+        header.id = 'toc-item-' + i;
+      }
+
+      // add list item with class matching header level (H2, H3, etc.)
+      html += '<li class="' + header.nodeName + '" title="#' + header.id + '" ';
+      html += 'onclick="document.getElementById(this.title.substr(1)).scrollIntoView({behavior:\'smooth\'}); return false;">';
+      html += header.textContent + '</li>';
+    }
+
+    html += '</ul></div>';
+    var existingNav = document.getElementById(tocDiv).innerHTML;
+    document.getElementById(tocDiv).innerHTML = html + existingNav;
+
+    if (enableScrollspy) {
+      md.setupScrollspy(tocDiv);
+    }
+  };
+
+  // scrollspy: highlight current section in TOC as user scrolls
+  md.setupScrollspy = function(tocDiv) {
+    var leftPanel = document.getElementById('left-panel');
+    var headerHeight = 67; // header height (60px) + padding-bottom (7px)
+    
+    // set the first section of the post as active
+    var tocItems = document.getElementById(tocDiv).querySelectorAll('.toc li');
+    tocItems[0].classList.add('active');
+
+    // listen to window scroll
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      // if header is scrolled by, set navbar to fixed
+      if (scrollTop >= headerHeight) {
+        leftPanel.style.position = 'fixed';
+        leftPanel.style.top = '0';
+        leftPanel.style.maxHeight = '100vh';
+      }
+      // otherwise absolute  
+      else {
+        leftPanel.style.position = 'absolute';
+        leftPanel.style.top = headerHeight + 'px';
+        leftPanel.style.maxHeight = 'calc(100vh - ' + headerHeight + 'px)';
+      }
+
+      // find the last header that's been scrolled past
+      var currentSection = 0;
+      var threshold = 100; // distance from top of viewport to consider "scrolled past"
+
+      for (var i = 0; i < tocItems.length; i++) {
+        var targetId = tocItems[i].title.substr(1);
+        var targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          var rect = targetElement.getBoundingClientRect();
+          // if header is above the threshold, it's the current section
+          if (rect.top <= threshold) {
+            currentSection = i;
+          }
+        }
+      }
+
+      // remove active class from all and add to current section
+      for (var j = 0; j < tocItems.length; j++) {
+        tocItems[j].classList.remove('active');
+      }
+      tocItems[currentSection].classList.add('active');
+    };
+  };
+
+  // restore normal navigation in left panel
+  md.restoreNav = function() {
+    if (typeof md.nav === 'function') {
+      md.nav(md.indexYaml ? md.indexYaml['nav-group'] : null);
+    }
+  };
+
+  if (typeof exports==='object') {
     module.exports=md;
-  } else if (typeof define==='function') { 
+  } else if (typeof define==='function') {
      define(function(){return md;});
   } else {
      this.md=md;

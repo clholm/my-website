@@ -72,7 +72,7 @@
 }
 
 .toc ul {
-    padding: 0 12px;
+    padding: 4px;
 }
 
 .toc h3 {
@@ -103,6 +103,10 @@
 
 .toc .active {
     color: #0057b7
+}
+
+.toc li {
+    cursor: pointer;
 }
 
 .toc li:hover {

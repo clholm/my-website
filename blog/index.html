@@ -47,8 +47,9 @@ md.normalizePath = function(filePath) {
 
 // load post from markdown file.
 md.load = function (mdfile) {
+  md.yaml = {};  // clear previous post's yaml
   var txt, xmlhttp = new XMLHttpRequest();
-  // Normalize the path to ensure it has ../ prefix for loading
+  // normalize the path to ensure it has ../ prefix for loading
   var normalizedPath = md.normalizePath(mdfile);
   xmlhttp.onload = function (e) {
     if (this.status == '404' ) {
@@ -60,6 +61,18 @@ md.load = function (mdfile) {
       document.getElementById('md-post').innerHTML = md.html(txt) + '<br>'
       document.getElementById('right-panel').scrollTop = 0
       md.showTags(normalizedPath)
+
+      // check if post has toc: true in frontmatter and generate TOC
+      if (md.yaml.toc === true || md.yaml.toc === 'true') {
+        md.restoreNav();  // generate nav first
+        md.toc('md-post', 'left-panel', {
+          css: 'h2,h3,h4',
+          title: 'table of contents',
+          scrollspy: true
+        });
+      } else {
+        md.restoreNav();
+      }
     }
   }
   xmlhttp.open("GET", normalizedPath, true)
@@ -84,10 +97,10 @@ md.showTags = function (file) {
 }
 
 // get blog list from "* yyyy/mm/dd: [post-title](md-file) { #tags }"
-md.getPosts = function (match,date,title,file,tags) {
+md.getPosts = function (match, date, title, file, tags) {
   // compose post list, list by tags, and list by month
-  var post = { date:new Date(date), title:title, file:file, tags:tags.trim().split(/\s*,\s*/) }
-  md.posts.push( post )
+  var post = { date: new Date(date), title: title, file: file, tags: tags.trim().split(/\s*,\s*/) }
+  md.posts.push(post)
   
   // post list by tags
   for (var i=0; i<post.tags.length; i++) {
@@ -108,14 +121,14 @@ md.getPosts = function (match,date,title,file,tags) {
 
 // generate nav content by options := featured | new-? | tags | month
 md.nav = function (options) {
-  var navOpt = (options||'featured, latest, tags, months').split(',')
+  var navOpt = (options || (md.indexYaml ? md.indexYaml['nav-group'] : '')).split(',')
   var navDiv = '<nav>'
 
-  for (var i=0; i<navOpt.length; i++) {
+  for (var i=0; i < navOpt.length; i++) {
 
     // generate featured posts list
     if (navOpt[i].trim() === 'featured') {
-      navDiv += '<p class="nav-title">Featured</p>'
+      navDiv += '<p class="nav-title">featured</p>'
       for (var x=0; md.tags.featured&&x<md.tags.featured.length; x++) {
         navDiv += '<li class="nav-post"><a href="#/post/'
         navDiv += md.toSlug(md.tags.featured[x].file) + '">' + md.tags.featured[x].title + '</a></li>'
@@ -124,7 +137,7 @@ md.nav = function (options) {
     // generate new posts list
     } else if (navOpt[i].trim().substr(0,4) === 'new-') {
       var max = 0 + navOpt[i].trim().substr(4)
-      navDiv += '<p class="nav-title">New posts</p>'
+      navDiv += '<p class="nav-title">new posts</p>'
       for (var x=0; x<max && x<md.posts.length; x++) {
         navDiv += '<li class="nav-post"><a href="#/post/'
         navDiv += md.toSlug(md.posts[x].file) + '">' + md.posts[x].title + '</a></li>'
@@ -132,7 +145,7 @@ md.nav = function (options) {
 
     // generate tag list
     } else if (navOpt[i].trim() === 'tags') {
-      navDiv += '<p class="nav-title">Tags</p>'
+      navDiv += '<p class="nav-title">tags</p>'
       for (var tag in  md.tags) {
         navDiv += '<li class="nav-tag"><a href="#/tag/' + tag + '">' + tag + '</a>'
         navDiv += ' <sup>(' + md.tags[tag].length + ')</sup></li>'
@@ -140,7 +153,7 @@ md.nav = function (options) {
 
     // generate monthly post list
     } else if (navOpt[i].trim() === 'months') {
-      navDiv += '<p class="nav-title">Archive</p>'
+      navDiv += '<p class="nav-title">archive</p>'
       for (var mth in  md.months) {
         navDiv += '<li class="nav-month"><a href="#/month/' + mth + '">' + mth + '</a>'
         navDiv += ' <sup>(' + md.months[mth].length + ')</sup></li>'
@@ -155,7 +168,7 @@ md.nav = function (options) {
 md.listPost = function (post) {
   var html = '\n<li><span class="post-date">' + post.date.toISOString().substr(0,10) + '</span>: '
   html += '<a class="post-title" href="#/post/' + md.toSlug(post.file) + '">' + post.title + '</a>'
-  return html + '<span class="post-tags">' + post.tags.join(',') + '</span>'
+  return html + '<span class="post-tags">' + post.tags.join(', ') + '</span>'
 }
 
 // show post list for tag
@@ -165,7 +178,7 @@ md.showTag = function (tag) {
   document.getElementById('md-post').innerHTML = html + '\n</ul><br>'
 }
 
-// massage md link before parse markdown
+// massage md links before parsing markdown
 md.before = function (text) {
  return text.replace(/\[(.*?)\]\((.*?\.md)\)/gm, function(match, title, file) {
    return '<a href="#/post/' + md.toSlug(file) + '">' + title + '</a>';
@@ -199,6 +212,12 @@ md.parseHash = function() {
 // handle routing based on current hash
 md.route = function() {
   var r = md.parseHash();
+
+  // restore normal navigation for non-post views
+  if (r.type !== 'post' && r.type !== 'page') {
+    md.restoreNav();
+  }
+
   if (r.type === 'page') {
     md.load(md.fromSlug(r.value));
   } else if (r.type === 'post') {
@@ -218,6 +237,7 @@ md.route = function() {
 md.posts  = []
 md.tags   = {}
 md.months = {}
+md.indexYaml = null
 
 // init blog page.
 window.onload = function () {
@@ -225,9 +245,11 @@ window.onload = function () {
 
   xmlhttp.onload = function (e) {
 
-    // load post list, and render markdown content, and create nav panel
-    md.text = this.responseText.replace( /^\*\s*(.+?)\:\s*\[(.*?)\]\((.*?)\)\s+\{(.+)\}\s*$/gm, md.getPosts )
+    // load post list, render markdown content, and create nav panel by using a
+    // regex and calling getPosts against each match
+    md.text = this.responseText.replace(/^\*\s*(.+?)\:\s*\[(.*?)\]\((.*?)\)\s+\{(.+)\}\s*$/gm, md.getPosts)
     document.getElementById('right-panel').innerHTML = md.html(md.text) + '<br>'
+    md.indexYaml = Object.assign({}, md.yaml)
     md.nav( md.yaml['nav-group'] )
 
     // apply style/title/subtitle

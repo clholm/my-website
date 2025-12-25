@@ -90,8 +90,10 @@ nav li {
     position: absolute;
     left: 0;
     width: 340px;
-    top: 60px;
-    padding: 8px
+    top: 67px;
+    padding: 8px;
+    max-height: calc(100vh - 67px);
+    overflow-y: auto;
 }
 
 /* #right-panel {
@@ -229,7 +231,7 @@ nav li {
 }
 
 .markdown code {
-    /* background-color: var(--ivory); */
+    background-color: var(--ivory);
     color: var(--blueish);
 }
 
@@ -241,12 +243,26 @@ nav li {
     border-left: 6px solid var(--celestial-blue);
 }
 
+.toc h3 {
+    color: var(--blueish);
+}
+
+.toc li:hover {
+    background: var(--celadon);
+}
+
+.toc .active {
+    color: var(--blueish);
+    font-weight: bold;
+    background: var(--ivory);
+}
+
 /* some gemini-generated css below */
 
 #right-panel {
     position: absolute;
     left: 360px;
-    top: 60px;
+    top: 67px;
     padding: 8px 16px;
     right: 8px; /* default small right margin for most screens */
 }
@@ -307,14 +323,14 @@ nav li {
         position: absolute;
         left: 0px !important;
         width: 100% !important;
-        top: 80px;
+        top: 87px;
         padding: 4px 8px
     }
 
     #right-panel {
         position: absolute;
         left: 0px !important;
-        top: 80px;
+        top: 87px;
         overflow: auto;
         padding: 4px 8px;
         right: 0px; /* Full width for these smaller screens */
@@ -332,14 +348,14 @@ nav li {
         position: absolute;
         left: 0px !important;
         width: 100% !important;
-        top: 100px;
+        top: 107px;
         padding: 4px 8px
     }
 
     #right-panel {
         position: absolute;
         left: 0px !important;
-        top: 100px;
+        top: 107px;
         overflow: auto;
         padding: 4px 8px;
         right: 0px; /* full width for very small screens */
