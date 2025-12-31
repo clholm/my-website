@@ -38,23 +38,22 @@ const Pond = {
   // lilypad config
   LILYPAD_SHADOW_PADDING: 8,  // matches CSS padding for shadow space
   LILYPAD_GREENS: [
-    "#2d5a27",  // dark forest
-    "#3d7a3d",  // medium green
-    "#4a9a4a",  // bright green
-    "#5dba5d",  // light green
-    "#2e8b57"   // sea green
+    "#2D5A27",  // dark forest
+    "#3D7A3D",  // medium green
+    "#4A9A4A",  // bright green
+    "#5DBA5D",  // light green
+    "#2E8B57"   // sea green
   ],
   LILYPAD_SIZE: { min: 40, max: 80 },
 
   // flower colors for lilypads
   FLOWER_PASTELS: [
-    "#FFB6C1",  // light pink
-    "#DDA0DD",  // plum
-    "#E6E6FA",  // lavender
-    "#FFFACD",  // lemon chiffon
-    "#FFE4B5",  // moccasin
+    "#ffa0aeff",  // pink
+    "#DDA0DD",  // poiple
+    "#BD5D73",  // red
+    "#F5C181",  // yeller
     "#B0E0E6",  // powder blue
-    "#F0FFF0"   // honeydew
+    "#6c97c2ff"   // deeper blue
   ],
 
   // water physics config - tuned for watery/bouncy feel

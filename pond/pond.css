@@ -202,7 +202,7 @@ body {
   box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* yellow center */
+/* yellow center on lilypad flower */
 .lilypad-flower::after {
   content: "";
   position: absolute;
@@ -210,7 +210,8 @@ body {
   left: 50%;
   width: 50%;
   height: 50%;
-  background: #FFE066;
+  /* background: #FFB955; */
+  background: #F5DE91;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
