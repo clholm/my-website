@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>𓆏 drop into the pond 𓆏</title>
+  <meta name="description" content="a calming interactive physics experiment with floating words" />
+  <link rel="stylesheet" href="pond.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css?family=Montserrat|Open+Sans");
+  </style>
+</head>
+<body>
+  <div id="pond-container">
+    <a id="back-link" href="../index.html">&larr; back</a>
+
+    <div id="input-area">
+      <textarea id="text-input" placeholder="enter words to drop into the pond..."></textarea>
+      <button id="drop-button">drop into the pond</button>
+    </div>
+
+    <div id="pond-surface"></div>
+    <div id="water-overlay"></div>
+
+    <button id="clear-button">clear pond</button>
+    <button id="lilypad-button">add lilypads</button>
+    <button id="audio-button">enable sound</button>
+  </div>
+
+  <script src="../js/matter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <script src="pond.js"></script>
+</body>
+</html>
