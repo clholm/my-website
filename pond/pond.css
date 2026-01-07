@@ -269,7 +269,7 @@ body {
 #lilypad-button,
 #audio-button {
   position: absolute;
-  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  bottom: 20px;
   padding: 8px 16px;
   font-family: "Open Sans", sans-serif;
   font-size: 12px;
@@ -333,5 +333,11 @@ body {
 
   #input-area {
     top: 10px;
+  }
+
+  #clear-button,
+  #lilypad-button,
+  #audio-button {
+    bottom: 80px;
   }
 }
