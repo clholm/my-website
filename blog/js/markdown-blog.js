@@ -294,6 +294,13 @@
         }
       }
 
+      // detect if we're at the bottom of the page and highlight last section
+      var isAtBottom = (window.innerHeight + window.pageYOffset) >=
+                       (document.documentElement.scrollHeight - 1);
+      if (isAtBottom && tocItems.length > 0) {
+        currentSection = tocItems.length - 1;
+      }
+
       // remove active class from all and add to current section
       for (var j = 0; j < tocItems.length; j++) {
         tocItems[j].classList.remove('active');
