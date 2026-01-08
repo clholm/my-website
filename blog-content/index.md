@@ -22,7 +22,7 @@ h1 { border-bottom:1px dotted grey }
 
 # Featured
 
-## [k8s secrets, metadata, and visibility](../blog-content/20251201-k8s-secrets-metadata-visibility.md)
+## [k8s secrets, metadata, and visibility](../blog-content/20260108-k8s-secrets-metadata-visibility.md)
 > observations about k8s secrets, their metadata, and the visibility of secret data
 
 ## [(one more) p-bass](../blog-content/20241223-p-bass.md)
@@ -30,7 +30,7 @@ h1 { border-bottom:1px dotted grey }
 
 # Archives
 
-* 2025/12/27: [k8s secrets, metadata, and visibility](../blog-content/20251201-k8s-secrets-metadata-visibility.md) { #k8s, #secrets, #featured }
+* 2026/01/08: [k8s secrets, metadata, and visibility](../blog-content/20260108-k8s-secrets-metadata-visibility.md) { #k8s, #secrets, #featured }
                     
 * 2024/12/24: [(one more) p-bass](../blog-content/20241223-p-bass.md) { #bass, #aluminum, #featured }
 
