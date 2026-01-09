@@ -194,6 +194,11 @@ nav li {
     border-color: var(--ivory);
 }
 
+.footnote-ref a,
+.footnote-backref {
+    cursor: pointer;
+}
+
 .nav-post a {
     color: var(--greenish);
 }

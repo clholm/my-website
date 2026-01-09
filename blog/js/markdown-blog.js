@@ -54,6 +54,27 @@
     // pass the token to the default renderer.
     return defaultRender(tokens, idx, options, env, self);
   };
+
+  // override footnote renderer to use onclick instead of href
+  // this prevents footnote anchors from breaking hash-based routing
+  markdownIt.renderer.rules.footnote_ref = function(tokens, idx, options, env, self) {
+    var id = tokens[idx].meta.id + 1;
+    var refId = id;
+    if (tokens[idx].meta.subId > 0) {
+      refId += ':' + tokens[idx].meta.subId;
+    }
+    return '<sup class="footnote-ref"><a id="fnref' + refId + '" onclick="document.getElementById(\'fn' + id + '\').scrollIntoView({behavior:\'smooth\'})">[' + id + ']</a></sup>';
+  };
+
+  markdownIt.renderer.rules.footnote_anchor = function(tokens, idx, options, env, self) {
+    var id = tokens[idx].meta.id + 1;
+    var refId = id;
+    if (tokens[idx].meta.subId > 0) {
+      refId += ':' + tokens[idx].meta.subId;
+    }
+    return ' <a onclick="document.getElementById(\'fnref' + refId + '\').scrollIntoView({behavior:\'smooth\'})" class="footnote-backref">↩︎</a>';
+  };
+
   // parse YAML frontmatter using js-yaml library
   md.formatYAML = function(front, matter) {
     try {
@@ -271,6 +292,13 @@
             currentSection = i;
           }
         }
+      }
+
+      // detect if we're at the bottom of the page and highlight last section
+      var isAtBottom = (window.innerHeight + window.pageYOffset) >=
+                       (document.documentElement.scrollHeight - 1);
+      if (isAtBottom && tocItems.length > 0) {
+        currentSection = tocItems.length - 1;
       }
 
       // remove active class from all and add to current section

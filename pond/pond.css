@@ -1,0 +1,343 @@
+/* pond Physics Experiment - Calm Water Aesthetic */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* container fills viewport with water gradient */
+#pond-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #1a3a4a 0%,
+    #2d5a6b 30%,
+    #3d7a8b 60%,
+    #4a9aab 100%
+  );
+  overflow: hidden;
+  cursor: default;
+}
+
+/* input area - floating at top center */
+#input-area {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#text-input {
+  width: 400px;
+  max-width: 90vw;
+  height: 80px;
+  padding: 12px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  resize: none;
+}
+
+#text-input:focus {
+  outline: none;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+#text-input::placeholder {
+  color: #6a8a9a;
+}
+
+#drop-button {
+  padding: 10px 24px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  /* text-transform: uppercase; */
+  letter-spacing: 1px;
+  color: #1a3a4a;
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#drop-button:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.05);
+}
+
+#drop-button:active {
+  transform: scale(0.98);
+}
+
+
+/* pond surface where words float */
+#pond-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* water surface effect overlay */
+#water-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(255,255,255,0.04) 0%, transparent 40%);
+}
+
+/* word styling */
+.pond-word {
+  position: absolute;
+  font-family: "Open Sans", Georgia, serif;
+  font-size: 20px;
+  color: #e8f4f8;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: grab;
+  user-select: none;
+  will-change: transform;
+  transition: background 0.2s ease;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.pond-word:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pond-word.dragging {
+  cursor: grabbing;
+  background: rgba(255, 255, 255, 0.25);
+  z-index: 1000;
+}
+
+/* lilypad styling */
+.lilypad {
+  position: absolute;
+  padding: 8px;  /* room for shadow to render outside the visual shape */
+  cursor: grab;
+  user-select: none;
+  will-change: transform;
+  pointer-events: auto;
+  /* drop-shadow on parent follows the clipped child's shape */
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
+  transition: filter 0.2s ease;
+  z-index: 1;
+}
+
+/* visual lilypad shape rendered via pseudo-element */
+.lilypad::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--lilypad-color);
+  /* pacman-style notch (~33% of circle missing) */
+  clip-path: polygon(
+    50% 50%,
+    33% 0%,
+    0% 0%,
+    0% 100%,
+    100% 100%,
+    100% 0%,
+    67% 0%,
+    50% 50%
+  );
+}
+
+.lilypad:hover {
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
+}
+
+.lilypad.dragging {
+  cursor: grabbing;
+  z-index: 1000;
+  filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.5));
+}
+
+/* flower on lilypad - simple two-circle design */
+.lilypad-flower {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Adjust for 8px padding: 50% of visual lilypad = (50% of padded container) - 8px */
+  width: calc(50% - 8px);
+  height: calc(50% - 8px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: var(--petal-color);
+  border-radius: 50%;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* yellow center on lilypad flower */
+.lilypad-flower::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  /* background: #FFB955; */
+  background: #F5DE91;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ripple effect for disturbances */
+.pond-ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  animation: ripple-expand 1s ease-out forwards;
+  z-index: 0;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* navigation link */
+#back-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  z-index: 100;
+  transition: color 0.2s ease;
+}
+
+#back-link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* ensure UI elements handle touch natively (not captured by Matter.js) */
+#input-area,
+#clear-button,
+#lilypad-button,
+#audio-button,
+#back-link {
+  touch-action: auto;
+}
+
+/* bottom buttons */
+#clear-button,
+#lilypad-button,
+#audio-button {
+  position: absolute;
+  bottom: 20px;
+  padding: 8px 16px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#clear-button {
+  left: 20px;
+}
+
+#lilypad-button {
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(45, 90, 39, 0.5);
+  border-color: rgba(93, 186, 93, 0.5);
+}
+
+#audio-button {
+  right: 20px;
+}
+
+#clear-button:hover,
+#lilypad-button:hover,
+#audio-button:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+#lilypad-button:hover {
+  background: rgba(45, 90, 39, 0.7);
+  border-color: rgba(93, 186, 93, 0.8);
+}
+
+#audio-button.enabled {
+  background: rgba(74, 154, 171, 0.6);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* responsive adjustments */
+@media (max-width: 500px) {
+  #text-input {
+    width: 90vw;
+    height: 60px;
+    font-size: 14px;
+  }
+
+  #drop-button {
+    padding: 8px 20px;
+    font-size: 12px;
+  }
+
+  .pond-word {
+    font-size: 16px;
+    padding: 4px 8px;
+  }
+
+  #input-area {
+    top: 10px;
+  }
+
+  #clear-button,
+  #lilypad-button,
+  #audio-button {
+    bottom: 80px;
+  }
+}
